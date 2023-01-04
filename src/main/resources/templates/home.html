@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Task repository</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div style="width: 100%; max-width: 800px; margin: 50px  auto">
+
+  <form action="/addTask" method="post" th:object="${newTask}">
+    <h2>Add task</h2>
+
+    <table class="table" style="width: 100%; max-width: 800px; margin: 10px  auto">
+      <thead>
+      <th scope="col">Category</th>
+      <th scope="col">Description</th>
+      <th scope="col">Deadline</th>
+      <th scope="col"></th>
+      </thead>
+      <tbody>
+        <td><select th:field="*{category}">
+          <option th:each="catType : ${T(com.michalszekalski.bootcamp_zad25.Category).values()}" th:text="${catType.getCatDesc()}" th:value="${catType}">
+        </select></td>
+        <td><input type="text" required th:field="*{description}"/></td>
+        <td><input type="date" required pattern="\d{4}-\d{2}-\d{2}" th:field="*{deadline}"/></td>
+        <td><button type="submit" class="btn btn-primary btn-sm">Add</button></td>
+      </tbody>
+  </table>
+  </form><br>
+
+    <h2>Tasks list</h2>
+
+    <a href="/" th:style="${filterMode} eq null? 'font-weight: bold' :''">All</a>
+    <a href="/?isDone=false" th:style="${filterMode} eq false? 'font-weight: bold' :''">ToDo</a>
+    <a href="/?isDone=true" th:style="${filterMode} eq true? 'font-weight: bold' :''">Done</a>
+
+    <table class="table table-hover" style="width: 100%; max-width: 800px; margin: 10px  auto" >
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Category</th>
+          <th scope="col">Description</th>
+          <th scope="col">Deadline</th>
+          <th scope="col">is done?</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr th:each="task: ${allTasks}" th:style="((${task.deadline} lt ${localDateNow}) and ${task.isDone()} eq false)? 'background:rgba(255, 0, 0, 0.3)' : ''">
+          <td th:text="${task.id}"></td>
+          <td th:text="${task.category.getCatDesc()}"></td>
+          <td th:text="${task.description}"></td>
+          <td th:text="${task.deadline}"></td>
+          <td style="text-align: center">
+            <form th:action="|/updateIsDone/${task.id}|" method="get">
+              <input class="form-check-input mt-0" type="checkbox" onchange="this.form.submit()" th:attrappend="checked=${task.isDone?'true':null}">
+            </form>
+          </td>>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
