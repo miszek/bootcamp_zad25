@@ -25,9 +25,9 @@ public class TaskController {
         List<Task> tasks;
 
         if (isDone == null) {
-            tasks = taskRepository.findAllOrderByDeadlineAsc();
+            tasks = taskRepository.findAllOrderByDeadline();
         } else {
-            tasks = taskRepository.findByIsDoneOrderByDeadlineAsc(isDone);
+            tasks = taskRepository.findByIsDoneOrderByDeadline(isDone);
         }
 
         model.addAttribute("filterMode", isDone);

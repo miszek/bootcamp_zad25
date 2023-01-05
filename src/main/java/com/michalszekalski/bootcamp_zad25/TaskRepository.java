@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    List<Task> findByIsDoneOrderByDeadlineAsc(Boolean isDone);
+    List<Task> findByIsDoneOrderByDeadline(Boolean isDone);
 
-    @Query("SELECT t FROM Task t ORDER BY t.deadline ASC")
-    List<Task> findAllOrderByDeadlineAsc();
+    @Query("SELECT t FROM Task t ORDER BY t.deadline")
+    List<Task> findAllOrderByDeadline();
 }
